@@ -1,0 +1,27 @@
+Extracts tests from comments on functions in coffeescript code.
+
+Names:
+  csdt
+  robusta-doc-test
+
+
+
+Advantages:
+  - Much less boilerplate. You don't have to care about require paths and maintaining test suites 
+  - No fancy naming. All info you need gets generated automatically.
+  - Easy execution. Just point to the file you want to run tests in: `robusta-doc-test src/pkg/file.coffee` - or a directory to run tests from all of its files: `coffee-doc-test src`
+  . The `node_modules` directory require
+  - Allows testing of unexported members
+
+Sample executions:
+- `coffee-doc-test src/pkg/file.coffee` will run all tests from file
+- `coffee-doc-test src` will run tests in all files in dir
+- `coffee-doc-test src/file.coffee target/tests/file.coffee target/clean-sources/file.coffee` saves the appropriate output
+- `coffee-doc-test src target/tests target/clean-sources` saves the appropriate output 
+
+
+OR as a part of robusta compiler or all-in-one robusta project
+  robusta src/pkg/file.coffee --run-doc-tests
+  robusta src/file.coffee \
+          --save-robusta-tests target/robusta-tests/file.coffee \
+          --save-clean-code target/clean-code/file.coffee
