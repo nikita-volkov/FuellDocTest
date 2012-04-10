@@ -12,6 +12,10 @@ value = (n) ->
   if n.value?.value then value n.value
   else n.value
 
+exports.name = 
+name = (n) ->
+  throw "Unimplemented: Node.name"
+
 
 exports.isFunction = 
 isFunction = (n) ->
@@ -24,9 +28,10 @@ exports.isClass =
 isClass = (n) ->
   "Class" == type n
 
-exports.isDeclaration = 
-isDeclaration = (n) ->
-  isFunction(n) || isClass(n)
+# exports.isDeclaration = 
+# isDeclaration = (n) ->
+#   isFunction(n) || isClass(n)
+
 
 exports.classMethods = 
 classMethods = (n) ->
@@ -34,6 +39,7 @@ classMethods = (n) ->
   non static members of a class
   ###
   Array.matches isFunction, n.body.expressions[0]?.base?.objects ? []
+
 
 exports.classComment = 
 classComment = (n) ->
@@ -46,8 +52,19 @@ functionComment = (n) ->
   ###
   Object.optional ((n) -> n?.comment?), value(n).body?.expressions[0]
 
+exports.comment =
+comment = (n) ->
+  if isClass n then classComment n
+  else if isFunction then functionComment n
 
 
+# exports.commentText = 
+# commentText = (n) ->
+#   comment(n)?.comment
+
+# exports.setCommentText = 
+# setCommentText = (text, n) ->
+#   comment(n).comment ?= text
 
 
 
