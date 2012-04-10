@@ -36,7 +36,7 @@ parsing = (text) ->
       @isNull parsing "  \n  "
   ###
   if not String.doesMatch /^\s*$/, text
-    text = String.trimmed Text.unindented text
+    text = Text.unindented Text.trimmed text
     if (r = MultipleTestsText.codeByNamePairs text)? 
       {testCodeByNamePairs: r}
     else {singleTestCode: text}

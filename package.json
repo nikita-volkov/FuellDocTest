@@ -17,14 +17,14 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "robusta-test -f"
+    "test": "bin/robusta-doc-test -f"
   },
   "dependencies": {
     "Fuell": "0.1.4",
     "FuellSys": "0.1.1",
-    "coffee-script": ">=1.2.0"
+    "coffee-script": ">=1.2.0",
+    "RobustaTest": "0.1.1"
   },
   "devDependencies": {
-    "RobustaTest": "0.1.1"
   }
 }

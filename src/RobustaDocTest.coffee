@@ -8,29 +8,52 @@ Code = require "./RobustaDocTest/Code"
 # compileToSuite = (file) ->
 #   throw "Unimplemented"
 
+
 exports.runPath = 
-runPath = (path, cb) ->
+runPath = (format, path, cb) ->
   if Path.fileExists path
-    runFiles path, [path], cb
+    runFiles format, path, [path], cb
   else if Path.dirExists path
-    runFiles path, (Paths.byExtension "coffee", Path.deepPaths path), cb
+    runFiles format, path, (Paths.byExtension "coffee", Path.deepPaths path), cb
   else
     throw "Path `#{path}` doesn't exist"
 
-runFiles = (srcDir, files, cb) ->
+runFiles = (format, srcDir, files, cb) ->
   suiteByNamePairs = 
     Array.results(
-      (p) -> [
-        Path.relativeTo srcDir + "/", Path.withoutExtension p
-        Map.pairs fileTests p
-      ]
+      (p) -> 
+        tests = fileTests p
+        if tests
+          [
+            Path.relativeTo srcDir + "/", Path.withoutExtension p
+            Map.pairs tests
+          ]
       files
     )
-  RobustaTest.runSuites suiteByNamePairs, cb
+
+  RobustaTest.runSuites format, suiteByNamePairs, cb
   
 fileTests = (file) ->
   code = Path.fileContents file
-  code = Code.suiteCode code
-  code = CoffeeScript.compile code, {filename: file}
+  code = Code.suiteJSCode file, code
+
+  Object.member "tests", jsCodeExports file, code
+
+jsCodeExports = (path, code) ->
+  ###
+  Fairly stolen from coffeescript
+  ###
   code = code + "\nreturn exports;"
-  Object.member "tests", require.main._compile code
+
+  mainModule = require.main
+
+  # Set the filename.
+  mainModule.filename = path
+
+  # Clear the module cache.
+  mainModule.moduleCache and= {}
+
+  # Assign paths for node_modules loading
+  mainModule.paths = require('module')._nodeModulePaths Path.dir path
+
+  mainModule._compile code, mainModule.filename

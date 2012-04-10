@@ -33,8 +33,7 @@ codeByNamePairs = (text) ->
             else 
               r = String.remainder indentation, line
               if r? then r
-              else 
-                throw "Incorrectly indented line: #{line}"
+              else throw "Incorrectly indented line: #{line}"
         Strings.interlayedUnion "\n", unindentedLines
     ]
 

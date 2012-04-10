@@ -14,7 +14,14 @@ value = (n) ->
 
 exports.name = 
 name = (n) ->
-  throw "Unimplemented: Node.name"
+  if n.variable?.base.value == "exports"
+    if n.variable.properties.length == 1 
+      n.variable.properties[0].name.value
+    else
+      throw "Incorrect function declaration"
+  else 
+    n.variable.base.value
+
 
 
 exports.isFunction = 
@@ -36,7 +43,7 @@ isClass = (n) ->
 exports.classMethods = 
 classMethods = (n) ->
   ###
-  non static members of a class
+  Non static members of a class
   ###
   Array.matches isFunction, n.body.expressions[0]?.base?.objects ? []
 

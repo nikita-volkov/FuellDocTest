@@ -7,7 +7,7 @@ unexportedFunction = ->
 ###
 Some outer comment
 ###
-
+class exports.A
 # a class
 class SomeClass
   ###
