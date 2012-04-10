@@ -52,21 +52,6 @@ functionComment = (n) ->
   ###
   Object.optional ((n) -> n?.comment?), value(n).body?.expressions[0]
 
-exports.comment =
-comment = (n) ->
-  if isClass n then classComment n
-  else if isFunction then functionComment n
-
-
-# exports.commentText = 
-# commentText = (n) ->
-#   comment(n)?.comment
-
-# exports.setCommentText = 
-# setCommentText = (text, n) ->
-#   comment(n).comment ?= text
-
-
 
 # {Path, Console} = require "FuellSys"
 # CoffeeScript = require "coffee-script"
