@@ -9,8 +9,8 @@ settings = do ->
   target:
     if args[0] && String.doesMatch /^[^-]/, args[0] then args[0]
     else "src"
-  format:
-    Array.containsAnyOf ["--format", "-f"], args
+  pretty:
+    Array.containsAnyOf ["--pretty", "-p"], args
 
 
-RobustaDocTest.runPath settings.format, settings.target, ->
+RobustaDocTest.runPath settings.pretty, settings.target, ->
