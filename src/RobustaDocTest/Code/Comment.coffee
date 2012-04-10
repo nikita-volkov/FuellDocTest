@@ -1,4 +1,5 @@
-{Action, Actions, Array, Arrays, Environment, Function, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "../FueL"
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Maps, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
+
 
 TestsText
 
@@ -25,11 +26,11 @@ parts = (comment) ->
   currentGroup = "textBeforeTests"
   for line in Text.lines comment
     switch currentGroup
-      when "textBeforeTests":
+      when "textBeforeTests"
         if "TESTS:" == String.trimmed line
           currentGroup = "testsText"
           continue
-      when "testsText":
+      when "testsText"
         if indentation == String.indentation line
           currentGroup = "textAfterTests"
 
