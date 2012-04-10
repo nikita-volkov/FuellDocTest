@@ -10,15 +10,15 @@ Code = require "./RobustaDocTest/Code"
 
 
 exports.runPath = 
-runPath = (format, path, cb) ->
+runPath = (pretty, path, cb) ->
   if Path.fileExists path
-    runFiles format, path, [path], cb
+    runFiles pretty, path, [path], cb
   else if Path.dirExists path
-    runFiles format, path, (Paths.byExtension "coffee", Path.deepPaths path), cb
+    runFiles pretty, path, (Paths.byExtension "coffee", Path.deepPaths path), cb
   else
     throw "Path `#{path}` doesn't exist"
 
-runFiles = (format, srcDir, files, cb) ->
+runFiles = (pretty, srcDir, files, cb) ->
   suiteByNamePairs = 
     Array.results(
       (p) -> 
@@ -31,7 +31,7 @@ runFiles = (format, srcDir, files, cb) ->
       files
     )
 
-  RobustaTest.runSuites format, suiteByNamePairs, cb
+  RobustaTest.runSuites pretty, suiteByNamePairs, cb
   
 fileTests = (file) ->
   code = Path.fileContents file
