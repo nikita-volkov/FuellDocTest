@@ -1,6 +1,7 @@
-{Action, Actions, Array, Arrays, Environment, Function, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "../FueL"
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Maps, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 
-TestsText
+
+TestsText = require "./Comment/TestsText"
 
 exports.parsing = 
 parsing = (comment) ->
@@ -10,9 +11,11 @@ parsing = (comment) ->
   `comment` is expected to be everything between opening and closing hashes. This includes whitespace and linebreaks.
   ###
   {textBeforeTests, testsText, textAfterTests} = parts comment
-  {testCodeByNamePairs, singleTestCode} = TestsText.parsing testsText
+  {testCodeByNamePairs, singleTestCode} = 
+    if testsText? then TestsText.parsing testsText
+    else {}
   {
-    clearedComment: textBeforeTests + textAfterTests
+    text: (textBeforeTests ? "") + (textAfterTests ? "")
     singleTestCode
     testCodeByNamePairs
   }
@@ -25,16 +28,16 @@ parts = (comment) ->
   currentGroup = "textBeforeTests"
   for line in Text.lines comment
     switch currentGroup
-      when "textBeforeTests":
+      when "textBeforeTests"
         if "TESTS:" == String.trimmed line
           currentGroup = "testsText"
           continue
-      when "testsText":
+      when "testsText"
         if indentation == String.indentation line
           currentGroup = "textAfterTests"
 
     if currentGroup of r 
-      r[currentGroup] += line
+      r[currentGroup] += "\n" + line
     else
       r[currentGroup] = line
 

@@ -1,4 +1,5 @@
-{Action, Actions, Array, Arrays, Environment, Function, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "../../../FueL"
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Maps, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
+
 
 exports.codeByNamePairs = 
 codeByNamePairs = (text) ->
@@ -32,33 +33,19 @@ codeByNamePairs = (text) ->
             else 
               r = String.remainder indentation, line
               if r? then r
-              else 
-                throw "Incorrectly indented line: #{line}"
+              else throw "Incorrectly indented line: #{line}"
         Strings.interlayedUnion "\n", unindentedLines
     ]
 
   if String.startsWith "- ", Array.first lines
     Array.results codeByNamePair, 
-      groupsWithHeadings [String.startsWith, "- "], lines
+      Array.groupsWithHeadings [String.startsWith, "- "], lines
   
-groupsWithHeadings = Function.composable (p, xs) ->
-  ###
-  TESTS:
-    @equals [[1,2,3],[1,6]], 
-      groupsWithHeadings ((x) -> x == 1), [1,2,3,1,6]
-  ###
-  Array.leftReduction(
-    (r, x) -> 
-      if p x
-        Array.appending [x], r
-      else if r.length > 0
-        Array.appending(
-          Array.appending x, Array.last r
-          Array.allButLast r
-        )
-      else throw "Input doesn't begin with header"
-    []
-    xs
-  )
-
-console.log codeByNamePairs "sdf\n- dslfjk"
+# console.log codeByNamePairs """
+#         - asd
+#           sldkfj
+#           sdlfkjsd
+#           sdlfkjs d
+#         - dslkfj
+#           dslfkjdskfj
+#       """
