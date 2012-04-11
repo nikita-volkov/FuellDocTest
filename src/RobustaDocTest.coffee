@@ -42,7 +42,8 @@ fileTests = (file) ->
   code = Path.fileContents file
   code = Code.suiteJSCode file, code
 
-  Object.member "tests", jsCodeExports file, code
+  if code.length > 0
+    Object.member "tests", jsCodeExports file, code
 
 jsCodeExports = (path, code) ->
   ###
