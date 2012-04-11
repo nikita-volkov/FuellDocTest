@@ -3,7 +3,7 @@
   "name": "RobustaDocTest",
   "description": "",
   "keywords": ["testing", "doc", "comments", "robusta", "coffeescript"],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": null,
   "repository": {
     "type": "git",
