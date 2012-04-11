@@ -12,26 +12,31 @@ Code = require "./RobustaDocTest/Code"
 exports.runPath = 
 runPath = (pretty, path, cb) ->
   if Path.fileExists path
-    runFiles pretty, path, [path], cb
+    runFile pretty, path, cb
   else if Path.dirExists path
-    runFiles pretty, path, (Paths.byExtension "coffee", Path.deepPaths path), cb
+    runDir pretty, path, cb
   else
     throw "Path `#{path}` doesn't exist"
 
-runFiles = (pretty, srcDir, files, cb) ->
+runFile = (pretty, file, cb) ->
+  testByNameMap = Map.pairs fileTests file
+  RobustaTest.runSuite pretty, "Docs of `#{file}`", testByNameMap, cb
+
+runDir = (pretty, dir, cb) ->
+  files = Paths.byExtension "coffee", Path.deepPaths dir
   suiteByNamePairs = 
     Array.results(
       (p) -> 
         tests = fileTests p
         if tests
           [
-            Path.relativeTo srcDir + "/", Path.withoutExtension p
+            Path.relativeTo dir + "/", Path.withoutExtension p
             Map.pairs tests
           ]
       files
     )
 
-  RobustaTest.runSuites pretty, suiteByNamePairs, cb
+  RobustaTest.runHarness pretty, "Docs of `#{dir}`", suiteByNamePairs, cb
   
 fileTests = (file) ->
   code = Path.fileContents file

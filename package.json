@@ -3,7 +3,7 @@
   "name": "RobustaDocTest",
   "description": "",
   "keywords": ["testing", "doc", "comments", "robusta", "coffeescript"],
-  "version": "0.1.1",
+  "version": "0.2.0",
   "homepage": null,
   "repository": {
     "type": "git",
@@ -17,13 +17,12 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "robusta-test -p"
   },
   "dependencies": {
-    "Fuell": "0.1.4",
-    "FuellSys": "0.1.1",
-    "coffee-script": ">=1.2.0",
-    "RobustaTest": "0.1.2"
+    "Fuell": "0.2.x",
+    "FuellSys": "0.1.x",
+    "coffee-script": "1.2.x",
+    "RobustaTest": "0.2.x"
   },
   "devDependencies": {
   }
