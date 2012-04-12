@@ -3,7 +3,7 @@
   "name": "FuellDocTest",
   "description": "A library for running unit-tests from comments in CoffeeScript code",
   "keywords": ["testing", "doc", "comments", "fuell", "coffeescript"],
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": null,
   "repository": {
     "type": "git",
