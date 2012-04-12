@@ -1,0 +1,97 @@
+Extracts and runs FuellTest-compliant (https://github.com/nikita-volkov/FuellTest) tests from comments on top-level functions, classes and methods of those classes in CoffeeScript code.
+
+The advantages of this library:
+  - Much less boilerplate. You don't have to care about maintaining test suites, require paths and etc
+  - No fancy naming. All info you need gets generated automatically
+  - Allows testing of unexported members
+  - Easy execution. Just type `fuell-doc-test` in your project's root directory
+
+The test code gets extracted from the coffeedoc-compliant (https://github.com/omarkhan/coffeedoc) comments block which starts with the `TESTS:` line. 
+
+There are two syntaxes using which one can declare the test-doc on a unit: single test and multitest. These are described in the two following respective example functions taken from this library:
+
+  exports.codeByNamePairs = 
+  codeByNamePairs = (text) ->
+    ###
+    TESTS:
+      @equals(
+        [ [ 'asd', 'sldkfj\nsdlfkjsd\nsdlfkjs d' ],
+          [ 'dslkfj', 'dslfkjdskfj' ] ]
+        codeByNamePairs """
+          - asd
+            sldkfj
+            sdlfkjsd
+            sdlfkjs d
+          - dslkfj
+            dslfkjdskfj
+        """
+      )
+      @isNull codeByNamePairs "sdf\n- dslfjk"
+    ###
+    lines = Text.lines text
+
+    codeByNamePair = (lines) ->
+      [
+        String.firstExtract /^- (.*):?$/, Array.first lines
+        do ->
+          codeLines = Array.allButFirst lines
+          indentation = String.indentation Array.first codeLines
+          unindentedLines = 
+            for line in codeLines
+              if String.doesMatch /^\s*$/, line then ""
+              else 
+                r = String.remainder indentation, line
+                if r? then r
+                else throw "Incorrectly indented line: #{line}"
+          Strings.interlayedUnion "\n", unindentedLines
+      ]
+
+    if String.startsWith "- ", Array.first lines
+      Array.results codeByNamePair, 
+        Array.groupsWithHeadings [String.startsWith, "- "], lines
+
+
+  exports.parsing = 
+  parsing = (text) ->
+    ###
+    `text` is everything in the "TESTS:" block
+
+    TESTS:
+      - single test:
+        @equals(
+          {singleTestCode: "line1\nline2"}
+          parsing """
+            line1
+            line2
+          """
+        )
+      - multiple named tests and empty tests:
+        @equals(
+          { testCodeByNamePairs: 
+             [ [ 'test 1', 'line1\nline2' ],
+               [ 'test 2', '' ],
+               [ 'test 3', 'a' ] ] }
+          parsing """
+            - test 1
+              line1
+              line2
+            - test 2
+            - test 3
+              a
+          """
+        )
+      - empty text:
+        @isNull parsing "  \n  "
+    ###
+    if not String.doesMatch /^\s*$/, text
+      text = Text.unindented Text.trimmed text
+      if (r = MultipleTestsText.codeByNamePairs text)? 
+        {testCodeByNamePairs: r}
+      else {singleTestCode: text}
+
+
+To run your suites execute either of the following commands from the root of your project:
+  `fuell-doc-test` - if your sources are located in the `src` folder
+  `fuell-doc-test path/to/src/folder/` - otherwise
+
+To produce a coloured output add a `--pretty` or `-p` parameter if your console supports it.
