@@ -1,7 +1,7 @@
 {
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
   "name": "FuellDocTest",
-  "description": "",
+  "description": "A library for running unit-tests from comments in CoffeeScript code",
   "keywords": ["testing", "doc", "comments", "fuell", "coffeescript"],
   "version": "0.3.0",
   "homepage": null,
