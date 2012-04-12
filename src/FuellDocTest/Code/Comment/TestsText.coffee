@@ -1,4 +1,5 @@
-{Action, Actions, Array, Arrays, Environment, Function, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "../../FueL"
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Maps, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
+
 
 MultipleTestsText = require "./TestsText/MultipleTestsText"
 
@@ -35,7 +36,7 @@ parsing = (text) ->
       @isNull parsing "  \n  "
   ###
   if not String.doesMatch /^\s*$/, text
-    text = String.trimmed Text.unindented text
+    text = Text.unindented Text.trimmed text
     if (r = MultipleTestsText.codeByNamePairs text)? 
       {testCodeByNamePairs: r}
     else {singleTestCode: text}
