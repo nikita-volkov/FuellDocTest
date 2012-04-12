@@ -1,8 +1,8 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Maps, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 {Path, Paths} = require "FuellSys"
 CoffeeScript = require "coffee-script"
-RobustaTest = require "RobustaTest"
-Code = require "./RobustaDocTest/Code"
+FuellTest = require "FuellTest"
+Code = require "./FuellDocTest/Code"
 
 # exports.compileToSuite = 
 # compileToSuite = (file) ->
@@ -20,7 +20,7 @@ runPath = (pretty, path, cb) ->
 
 runFile = (pretty, file, cb) ->
   testByNameMap = Map.pairs fileTests file
-  RobustaTest.runSuite pretty, "Docs of `#{file}`", testByNameMap, cb
+  FuellTest.runSuite pretty, "Docs of `#{file}`", testByNameMap, cb
 
 runDir = (pretty, dir, cb) ->
   files = Paths.byExtension "coffee", Path.deepPaths dir
@@ -36,7 +36,7 @@ runDir = (pretty, dir, cb) ->
       files
     )
 
-  RobustaTest.runHarness pretty, "Docs of `#{dir}`", suiteByNamePairs, cb
+  FuellTest.runHarness pretty, "Docs of `#{dir}`", suiteByNamePairs, cb
   
 fileTests = (file) ->
   code = Path.fileContents file

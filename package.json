@@ -1,23 +1,23 @@
 {
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
-  "name": "RobustaDocTest",
+  "name": "FuellDocTest",
   "description": "",
-  "keywords": ["testing", "doc", "comments", "robusta", "coffeescript"],
-  "version": "0.2.2",
+  "keywords": ["testing", "doc", "comments", "fuell", "coffeescript"],
+  "version": "0.3.0",
   "homepage": null,
   "repository": {
     "type": "git",
-    "url": "http://github.com/nikita-volkov/RobustaDocTest"
+    "url": "http://github.com/nikita-volkov/FuellDocTest"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/nikita-volkov/RobustaDocTest/master/LICENSE"
+      "url": "https://raw.github.com/nikita-volkov/FuellDocTest/master/LICENSE"
     }
   ],
-  "main": "lib/RobustaDocTest.js",
+  "main": "lib/FuellDocTest.js",
   "bin": {
-    "robusta-doc-test": "bin/robusta-doc-test"
+    "fuell-doc-test": "bin/fuell-doc-test"
   },
   "directories": {
     "lib": "lib"
@@ -27,8 +27,8 @@
   "dependencies": {
     "Fuell": "0.2.x",
     "FuellSys": "0.1.x",
-    "coffee-script": ">1.2.0",
-    "RobustaTest": "0.2.x"
+    "FuellTest": "0.3.x",
+    "coffee-script": ">1.2.0"
   },
   "devDependencies": {
   }
