@@ -1,27 +1,97 @@
-Extracts tests from comments on functions in coffeescript code.
+Extracts and runs FuellTest-compliant (https://github.com/nikita-volkov/FuellTest) tests from comments on top-level functions, classes and methods of those classes in CoffeeScript code.
 
-Names:
-  csdt
-  robusta-doc-test
-
-
-
-Advantages:
-  - Much less boilerplate. You don't have to care about require paths and maintaining test suites 
-  - No fancy naming. All info you need gets generated automatically.
-  - Easy execution. Just point to the file you want to run tests in: `robusta-doc-test src/pkg/file.coffee` - or a directory to run tests from all of its files: `coffee-doc-test src`
-  . The `node_modules` directory require
+The advantages of this library:
+  - Much less boilerplate. You don't have to care about maintaining test suites, require paths and etc
+  - No fancy naming. All info you need gets generated automatically
   - Allows testing of unexported members
+  - Easy execution. Just type `fuell-doc-test` in your project's root directory
 
-Sample executions:
-- `coffee-doc-test src/pkg/file.coffee` will run all tests from file
-- `coffee-doc-test src` will run tests in all files in dir
-- `coffee-doc-test src/file.coffee target/tests/file.coffee target/clean-sources/file.coffee` saves the appropriate output
-- `coffee-doc-test src target/tests target/clean-sources` saves the appropriate output 
+The test code gets extracted from the coffeedoc-compliant (https://github.com/omarkhan/coffeedoc) comments block which starts with the `TESTS:` line. 
+
+There are two syntaxes using which one can declare the test-doc on a unit: single test and multitest. These are described in the two following respective example functions taken from this library:
+
+  exports.codeByNamePairs = 
+  codeByNamePairs = (text) ->
+    ###
+    TESTS:
+      @equals(
+        [ [ 'asd', 'sldkfj\nsdlfkjsd\nsdlfkjs d' ],
+          [ 'dslkfj', 'dslfkjdskfj' ] ]
+        codeByNamePairs """
+          - asd
+            sldkfj
+            sdlfkjsd
+            sdlfkjs d
+          - dslkfj
+            dslfkjdskfj
+        """
+      )
+      @isNull codeByNamePairs "sdf\n- dslfjk"
+    ###
+    lines = Text.lines text
+
+    codeByNamePair = (lines) ->
+      [
+        String.firstExtract /^- (.*):?$/, Array.first lines
+        do ->
+          codeLines = Array.allButFirst lines
+          indentation = String.indentation Array.first codeLines
+          unindentedLines = 
+            for line in codeLines
+              if String.doesMatch /^\s*$/, line then ""
+              else 
+                r = String.remainder indentation, line
+                if r? then r
+                else throw "Incorrectly indented line: #{line}"
+          Strings.interlayedUnion "\n", unindentedLines
+      ]
+
+    if String.startsWith "- ", Array.first lines
+      Array.results codeByNamePair, 
+        Array.groupsWithHeadings [String.startsWith, "- "], lines
 
 
-OR as a part of robusta compiler or all-in-one robusta project
-  robusta src/pkg/file.coffee --run-doc-tests
-  robusta src/file.coffee \
-          --save-robusta-tests target/robusta-tests/file.coffee \
-          --save-clean-code target/clean-code/file.coffee
+  exports.parsing = 
+  parsing = (text) ->
+    ###
+    `text` is everything in the "TESTS:" block
+
+    TESTS:
+      - single test:
+        @equals(
+          {singleTestCode: "line1\nline2"}
+          parsing """
+            line1
+            line2
+          """
+        )
+      - multiple named tests and empty tests:
+        @equals(
+          { testCodeByNamePairs: 
+             [ [ 'test 1', 'line1\nline2' ],
+               [ 'test 2', '' ],
+               [ 'test 3', 'a' ] ] }
+          parsing """
+            - test 1
+              line1
+              line2
+            - test 2
+            - test 3
+              a
+          """
+        )
+      - empty text:
+        @isNull parsing "  \n  "
+    ###
+    if not String.doesMatch /^\s*$/, text
+      text = Text.unindented Text.trimmed text
+      if (r = MultipleTestsText.codeByNamePairs text)? 
+        {testCodeByNamePairs: r}
+      else {singleTestCode: text}
+
+
+To run your suites execute either of the following commands from the root of your project:
+  `fuell-doc-test` - if your sources are located in the `src` folder
+  `fuell-doc-test path/to/src/folder/` - otherwise
+
+To produce a coloured output add a `--pretty` or `-p` parameter if your console supports it.
