@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/nikita-volkov/FuellDocTest.png)](http://travis-ci.org/nikita-volkov/FuellDocTest)
 Extracts and runs FuellTest-compliant (https://github.com/nikita-volkov/FuellTest) tests from comments on top-level functions, classes and methods of those classes in CoffeeScript code.
 
 The advantages of this library:
